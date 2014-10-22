@@ -220,8 +220,8 @@ class App:
 
 	def key_release (self, widget, event):
 		#print event
-		if event.keyval == gtk.gdk.space:
-			self.step_completed = 1
+		#if event.keyval == gtk.gdk.space:
+		self.step_completed = 1
 
 	def run_algorithm (self, clicked, arg):
 		alg = arg[0]
