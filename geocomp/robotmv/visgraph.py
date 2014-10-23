@@ -8,6 +8,7 @@ from geocomp.common.point import Point
 from geocomp.common import control
 from geocomp.common.guiprim import *
 from geocomp import config
+from tree import Tree
 
 
 """Função do algoritmo em si. Supomos aqui que:
@@ -42,10 +43,9 @@ def visGraphAlg(l):
 		poligs[i].hilight()
 		pontos.extend(poligs[i].to_list())
 
-	compara = criaCompara(probo)
 	print pontos
 	#print compara(pontos[3], pontos[1])
-	pontos.sort(cmp=compara, reverse = True)
+	pontos.sort(criaCompara(probo), reverse = True)
 	print pontos
 
 	for i in range(len(pontos)):
