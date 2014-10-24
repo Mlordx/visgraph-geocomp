@@ -6,6 +6,7 @@
 from geocomp.common.polygon import Polygon
 from geocomp.common.point import Point
 from geocomp.common import control
+from geocomp.common.segment import Segment
 from geocomp.common.guiprim import *
 from geocomp import config
 from tree import Tree
@@ -45,13 +46,24 @@ def visGraphAlg(l):
 
 	print pontos
 	#print compara(pontos[3], pontos[1])
-	pontos.sort(criaCompara(probo), reverse = True)
+	compara = criaCompara(probo)
+	pontos.sort(cmp = compara, reverse = True)
 	print pontos
 
-	for i in range(len(pontos)):
-		pontos[i].hilight('blue')
-		control.sleep()
-		pontos[i].hilight('red')
+	#Vamos tentar ver os vértices visiveis a partir do robo
+
+	#definir os segmentos que intersectam px->inf+
+	tree1 = Tree()
+	for i in range(len(poligs)):
+		listaPs = poligs[i].to_list()
+		n = len(listaPs)
+		for j in range(n):
+			a = listaPs[j]; b = listaPs[(j+1)%n];
+			if(passaEixoX(a, b, probo)):
+				if(compara(a, b) == 1): tree1.insert(Segment(a,b));
+				else: tree1.insert(Segment(b,a));
+				a.lineto(b, 'yellow')
+				print "vish"
 
 
 
@@ -69,6 +81,39 @@ def visGraphAlg(l):
 	poligs[1][len(poligs[1])-1].lineto(poligs[1][0])
 
 """
+
+
+"""
+
+	Testa se o segmento a-b intersecta o segmento
+	p.x-inf+
+
+"""
+
+def passaEixoX(a,b,p):
+	#Acerta quem é a e b para acertarmos a orientação
+	if(a.y < b.y):
+		aux = a; a = b; b = aux;
+	elif(a.y == b.y):
+		if(a.x > b.x):
+			aux = a; a = b; b = aux;
+
+	#print "Analisando (%d, %d)->(%d, %d) para (%d, %d)"% (a.x, a.y, b.x, b.y, p.x, p.y)
+
+	if(a.y >= p.y and b.y <= p.y and right(a,b,p)):
+		return True #cruza o eixo p.x-inf+
+	else: return False
+
+
+"""
+	Cria um objeto Segmento com os pontos a,b,
+	orientado de forma apr
+
+def criaSegOrientado()
+
+
+"""
+
 
 
 

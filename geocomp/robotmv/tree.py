@@ -16,6 +16,17 @@ class Folha:
 	def __init__(self, key):
 		self.key = key
 
+
+
+	def delete(self,x,carry):
+		s = self.key
+		if(s.init == x.init and s.to == x.to): #Deveria sempre ser True
+			print "Ok"
+		else:
+			print "Vish~"
+		return carry
+
+
 	def insert(self,x):
 		s = self.key
 		if(s is None): 
@@ -37,6 +48,21 @@ class InCel:
 		self.l = left
 		self.key = key
 
+
+
+	def delete(self, x, carry):
+		s = self.key
+		if(s.init == x.init and s.to == x.to): #Achou o nó interno com chave igual
+			carry = self.r
+			self.l = self.l.delete(x, carry)
+			return self.l #?
+		if(right_on(s.init, s.to, x.to)): # Compara com o fim de X.... pensar melhor depois
+			self.l = self.l.delete(x, carry)
+		else:
+			self.r = self.r.delete(x, carry)
+		return self
+
+
 	# x é um segmento novo
 	def insert(self, x):
 		s = self.key;
@@ -52,7 +78,7 @@ class InCel:
 			return self.key 
 			#Ou self.r.getMin().
 			#Provavelmente tem o mesmo efeito, mas com possivelmente
-			#maior
+			#maior tempo de execução
 		else:
 			return resp
 
@@ -60,12 +86,15 @@ class InCel:
 
 class Tree:
 	def __init__(self):
-		self.root = Leave(None)
+		self.root = Folha(None)
 
 	def insert(self, x):
 		self.root = self.root.insert(x)
 
 	def getMin(self):
 		return self.root.getMin()
+
+	def delete(self, x):
+		self.root = self.root.delete(x,None)
 
 
