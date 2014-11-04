@@ -233,9 +233,9 @@ def visivel(T, S, p, i):
 	elif( not S[i-1].visivel ):
 		print "Anterior não é visível"
 		a.visivel = False
-	else:
+	else: 
 		if(S[i-1].prev != S[i-1]): #S[i-1] esta em um polígono
-			if(noCone(S[i-1].prev, S[i-1], S[i-1].next, a)):
+			if(noCone(S[i-1].prev, S[i-1], S[i-1].next, a)): #############################
 				a.visivel = False
 				print "Falhou no cone 2"
 				return a.visivel

@@ -65,7 +65,7 @@ class InCel:
 
 
 
-	def delete(self, x, carry):
+	def delete(self, x, carry): #############################################
 		s = self.key
 		if(s.init == x.init and s.to == x.to): #Achou o nó interno com chave igual
 			carry = self.r
