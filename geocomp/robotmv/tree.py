@@ -10,14 +10,15 @@ from geocomp.common.segment import Segment
 from geocomp.common.prim import *
 from minhasPrim import *
 
+"""
+DEFINES DE CONTROLE
+"""
+
+PINTA = False;
 
 
-
-class Folha:
-	def __init__(self, key):
-		self.key = key
-
-
+#Deleão antiga de folha
+"""
 		#Cheio das pogz
 	def delete(self,x,carry):
 		s = self.key
@@ -29,6 +30,28 @@ class Folha:
 			print "Vish~"
 		if(carry is None): return Folha(None)
 		return carry
+"""
+
+
+class Folha:
+	def __init__(self, key):
+		self.key = key
+
+
+
+	def delete(self,x):
+		s = self.key
+		#if(carry is None): return self #Não achou(??)
+		if(s is None): 
+			print "FOLHA NULL?? QUE. Estava tentando deletar: ", x
+			return Folha(None) #wtf
+		if(s.init == x.init and s.to == x.to): #Deveria sempre ser True
+			print "Ok"
+			return Folha(None);
+		else:
+			print "Deleção falhou, chegou em:", self.key
+			return self
+
 
 
 	def insert(self,x):		
@@ -37,12 +60,25 @@ class Folha:
 			self.key = x
 			return self
 		else:
-			if(right_on(s.init, s.to, x.init)):
+			if(right(s.init, s.to, x.init)):
 				return InCel(x, Folha(x), Folha(s))
+			elif(collinear(s.init, s.to, x.init)):
+				if(right(x.init, x.to, s.init)):
+					return InCel(s, Folha(s), Folha(x))
+				else:
+					return InCel(x, Folha(x), Folha(s))
 			else:
 				return InCel(s, Folha(s), Folha(x))
 
+	#Deleta a folha mais a direita. E retorna o irmão esquerdo dessa folha
+	def delMax(self):
+		return Folha(None);
+		
+
 	def getMin(self):
+		return self.key
+
+	def getMax(self):
 		return self.key
 
 	def procuraInter(self, seg):
@@ -53,18 +89,13 @@ class Folha:
 	def __repr__(self, level=0):
 		x = self.key
 		if(self.key is None): x = "NADA"
-		ret = "\t"*level+repr(self.key)+"\n"
+		ret = "\t"*level+repr(x)+"\n"
 		return ret
 
 
-class InCel:
-	def __init__(self, key, left, right):
-		self.r = right
-		self.l = left
-		self.key = key
 
-
-
+"""
+	#Delete antigo da célula
 	def delete(self, x, carry): #############################################
 		s = self.key
 		if(s.init == x.init and s.to == x.to): #Achou o nó interno com chave igual
@@ -76,7 +107,59 @@ class InCel:
 		else:
 			self.r = self.r.delete(x, carry)
 		return self
+"""
 
+
+class InCel:
+	def __init__(self, key, left, right):
+		self.r = right
+		self.l = left
+		self.key = key
+
+
+
+	def delete(self,x):
+		s = self.key
+		if(s.init == x.init and s.to == x.to): #Achou o nó interno com chave igual
+			self.l = self.l.delMax()
+			if(isinstance(self.l,Folha) and self.l.key is None): #self.l era folha
+				return self.r
+			self.key = self.r.getMax()
+			return self
+		if(right(s.init, s.to, x.to)): # Compara com o fim de X.... pensar melhor depois
+			print "TUDO A DIREITA NA DELEÇÃO"
+			self.l = self.l.delete(x)
+			if(isinstance(self.l, Folha) and self.l.key is None): 
+				print "ERRO 1 NO DELETE!!!!!!"
+				return self.r; #???
+		elif(collinear(s.init, s.to, x.to)):
+			print "COLINEAR NA DELEÇÃO"
+			if(right(s.init, s.to, x.init)):
+				self.l = self.l.delete(x)
+				if(isinstance(self.l, Folha) and self.l.key is None): 
+					print "ERRO 1 NO DELETE!!!!!!"
+					return self.r; #???
+			else:
+				print "MAOE(????)"
+				self.r = self.r.delete(x)
+				if(self.r is None): #self.r era a folha;
+					return self.l;				
+		else:
+			print "FAIOU EM TUDO NA DELEÇÃO"
+			self.r = self.r.delete(x)
+			if(isinstance(self.r,Folha) and self.r.key is None): #self.r era a folha;
+				return self.l;
+		return self
+
+
+	def delMax(self):
+		self.r = self.r.delMax();
+		if(isinstance(self.r, Folha) and self.r.key is None): #self.r era folha
+			return self.l;
+		return self;
+
+	def getMax(self):
+		return self.r.getMax();
 
 	# x é um segmento novo
 	def insert(self, x):
@@ -84,10 +167,11 @@ class InCel:
 		if(right(s.init, s.to, x.init)):
 			self.l = self.l.insert(x)
 		elif(collinear(s.init, s.to, x.init)):
-			if(right(s.init, s.to, x.init)):
-				self.l = self.l.insert(x)
-			else:
+			if(right(x.init, x.to, s.init)): # MUDEI, EXPERIEMTNANDO. 
+											 #Antigo: right(s.init, s.to, x.to), com if e else invertido
 				self.r = self.r.insert(x)
+			else:
+				self.l = self.l.insert(x)
 		else:
 			self.r = self.r.insert(x)
 		return self
@@ -126,7 +210,7 @@ class Tree:
 
 	def insert(self, x):
 		print "Entrando2: ", x
-		x.hilight('yellow')
+		if(PINTA): x.hilight('yellow')
 		self.root = self.root.insert(x)
 		#print self
 
@@ -135,8 +219,9 @@ class Tree:
 
 	def delete(self, x):
 		print "Tentando deletar:", x
-		x.plot('red')
-		self.root = self.root.delete(x,None)
+		if(PINTA): x.plot('red')
+		self.root = self.root.delete(x)
+		#self.root = self.root.delete(x,None)
 		#print self
 
 	def procuraInter(self, seg):

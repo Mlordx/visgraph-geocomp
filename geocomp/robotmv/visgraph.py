@@ -11,6 +11,7 @@ from geocomp.common.guiprim import *
 from geocomp import config
 from tree import Tree
 from minhasPrim import *
+from graph import *
 
 
 """Função do algoritmo em si. Supomos aqui que:
@@ -27,16 +28,16 @@ from minhasPrim import *
 """
 
 def visGraphAlg(l):
-	print "HUE2"
 	poligs = leEntrada(l)
 
 	robo = poligs[0]
+	destino = poligs[1][0] #Suponho ser um ponto
 	if(len(robo) == 1):
 		print "Robo ponto na posicao ", robo[0] 
 		probo = robo[0]
 		probo.hilight('green')
 	else:
-		print "Busca de rotas para robos não pontuais não implementado ainda"
+		print "Busca de rotas para robos não-pontuais não implementado ainda"
 
 	#poligs.pop(0) #Tira o robo da lista de polígonos
 	pontos = []
@@ -62,21 +63,19 @@ def visGraphAlg(l):
 #		probo.remove_lineto(pontos[i])
 #		pontos[i].hilight('red')
 
-	pi = pontos[len(pontos)-5]
-	pontos.append(probo)
+#	pi = pontos[len(pontos)-5]
+#	pontos.append(probo)
 
 
-	compara = criaCompara(pi)
-	pontos.sort(cmp = compara, reverse = True)
-	for i in range (len(pontos)):
-		pontos[i].hilight('yellow')
-		pi.lineto(pontos[i], 'blue');
-		control.sleep()
-		pi.remove_lineto(pontos[i])
-		pontos[i].hilight('red')
-	print "PRE-PA-RA"
-	print compara(pontos[len(pontos)-2],pontos[len(pontos)-1])
-	print "HUEEEEEEEE"
+#	compara = criaCompara(pi)
+#	pontos.sort(cmp = compara, reverse = True)
+#	for i in range (len(pontos)):
+#		pontos[i].hilight('yellow')
+#		pi.lineto(pontos[i], 'blue');
+#		control.sleep()
+#		pi.remove_lineto(pontos[i])
+#		pontos[i].hilight('red')
+
 
 	
 #	W = verticesVisiveis(pi, poligs)
@@ -85,10 +84,31 @@ def visGraphAlg(l):
 #		pi.lineto(W[i], 'blue')
 #	print "oie"
 
+
+	#Grafo
+	G = Grafo(len(pontos))
+
+	#Numerando os pontos
+	for i in range(len(pontos)):
+		pontos[i].i = i;
+
 	for pi in pontos:
 		W = verticesVisiveis(pi, poligs)
-		for i in range(len(W)):
-			pi.lineto(W[i], 'blue')
+		for pj in W:
+			G.addAresta(pi.i,pj.i, dist2(pi,pj)**0.5)
+		
+
+
+
+
+	if(G.adjacente(probo.i, destino.i)): print "WAAAAAAAAAAAAAAAT"
+	path, dist = G.dijkstra(probo.i, destino.i)
+	print path
+	for i in range(len(path)-1):
+		v = path[i]; u = path[i+1]
+		pontos[v].lineto(pontos[u], 'red')
+
+		
 	#Vamos tentar ver os vértices visiveis a partir do robo
 
 	#definir os segmentos que intersectam px->inf+
@@ -166,7 +186,7 @@ def leEntrada(l):
 def criaCompara(p):
 	def menor(a, b):
 		if( (p.y == a.y) and (p.y == b.y) ):
-			print "Caso degenerado"
+			#print "Caso degenerado"
 			if( (p.x < a.x) != (p.x < b.x) ):
 				if(p.x < a.x): return 1
 				else: return -1 #??
@@ -176,7 +196,7 @@ def criaCompara(p):
 				elif( da > db): return -1
 				else: return 0
 		if( ((p.y >= a.y) == (p.y >= b.y))): #Estão no mesmo hemisfério
-			print "Caso 1"
+			#print "Caso 1"
 			if( left(p,a,b) ): return -1
 			elif( collinear(a, b, p) ):
 				da = dist2(a,p); db = dist2(b,p);
@@ -185,7 +205,7 @@ def criaCompara(p):
 				else: return 0
 			else: return 1 # b esta a direita de p->a
 		else: #a e b estão em lados diferentes da bola
-			print "Caso2"
+			#print "Caso2"
 			if( a.y <= p.y ): return 1;
 			else: return -1
 	return menor
@@ -225,10 +245,10 @@ def visivel(T, S, p, i):
 			print "Seg min é null"
 			return a.visivel
 		print "Testando intersec com min"
-		segMin.hilight('blue')
+		#segMin.hilight('blue')
 		print segMin
 		control.sleep()
-		segMin.hilight('yellow')
+		#segMin.hilight('yellow')
 		a.visivel = not intersectaProp(segMin, Segment(p,a)) 
 	elif( not S[i-1].visivel ):
 		print "Anterior não é visível"
@@ -269,23 +289,34 @@ def verticesVisiveis(p, poligs):
 	W = []; 
 	for i in range(len(pontos)):
 		a = pontos[i]
+
 		p.lineto(a, 'white')
-		a.hilight('blue')
+		a.hilight('yellow')
 		control.sleep()
+		a.hilight('red')
 		a.unhilight()
+
+
 		if(visivel(T, pontos, p, i)): 
-			print "VISIVEL"
+			#print "VISIVEL"
 			if(a is not p):
 				W.append(a)
 				p.lineto(a, 'blue')
+			else: continue; #será?
 		else: p.remove_lineto(a)
 		b = a.prev; c = a.next;
 		
+		if( a.x == b.x and a.y == b.y): continue #a não está em um
+												#polígono
+
+
 		print "Vish ", i, pontos[i]
 		if(left_on(p,a,b)): T.delete(Segment(b,a))
 		else: T.insert(Segment(a,b))
+		#print T
 		if(left_on(p,a,c)): T.delete(Segment(c,a))
 		else: T.insert(Segment(a,c))
+		#print T;
 	#	print "Oie~", i
 
 	return W
