@@ -152,7 +152,20 @@ def somaMinkowski(lista1, lista2):
                 ang2 = anguloX(l2[j],l2[j+1])
 
                 print "Ang1: %f Ang2: %f \n" % (ang1, ang2)
-                if(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == -1): 
+
+                
+
+                
+
+                
+
+                ##### POG #####
+                if(i == n):
+                        j = j + 1
+                elif(j == m):
+                        i = i + 1
+                ##### FIM DA POG ####
+                elif(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == -1): 
                         i = i + 1
                 elif(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == 1): 
                         j = j + 1

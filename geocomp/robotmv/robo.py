@@ -23,7 +23,7 @@ class Robo:
         """
         
         def __init__(self, pontos):
-		self.pontos = pontos
+		  self.pontos = pontos
                 
 
         """
@@ -34,10 +34,10 @@ class Robo:
                 
 
         def getPontos(self, xoff, yoff):
-                lista2 = []
-                for p in self.pontos:
-                        lista2.append(Point(p.x, p.y))
-                return (lista2)
+            lista2 = []
+            for p in self.pontos:
+                    lista2.append(Point(p.x, p.y))
+            return (lista2)
 
         """
 
@@ -50,11 +50,11 @@ class Robo:
 
 
         def deformaPolig(self, polig):
-                pontosNeg = [0 for p in self.pontos]
-                j = len(self.pontos)-1;
-                for i in range(len(self.pontos)):
-                        p = self.pontos[i]
-                        pontosNeg[j-i] = Point(-p.x, -p.y)
-                return somaMinkowski(pontosNeg, polig)
+            pontosNeg = [Point(-p.x, -p.y) for p in self.pontos]
+            #  j = len(self.pontos)-1;
+            #  for i in range(len(self.pontos)):
+            #          p = self.pontos[i]
+            #          pontosNeg[j-i] = Point(-p.x, -p.y)
+            return somaMinkowski(pontosNeg, polig)
 
 
