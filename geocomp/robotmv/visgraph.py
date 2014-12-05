@@ -43,6 +43,7 @@ def visGraphAlg(l):
                 poligs.pop(0) #Removo o polígono do robo da lista, iremos tratar só com o ponto
                 for i in range(len(poligs)):
                         if(len(poligs[i]) > 1):
+                                Polygon(poligs[i]).hilight("cyan")
                                 poligs[i] = robo.deformaPolig(poligs[i])
                         
 
