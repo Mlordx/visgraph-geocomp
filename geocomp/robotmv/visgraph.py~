@@ -12,7 +12,6 @@ from geocomp import config
 from tree import Tree
 from minhasPrim import *
 from graph import *
-from robo import Robo
 
 
 """Função do algoritmo em si. Supomos aqui que:
@@ -38,15 +37,9 @@ def visGraphAlg(l):
 		probo = robo[0]
 		probo.hilight('green')
 	else:
-		robo = Robo(robo)
-                probo = poligs[1]
-                poligs.pop(0) #Removo o polígono do robo da lista, iremos tratar só com o ponto
-                for i in range(len(poligs)):
-                        if(len(poligs[i]) > 1):
-                                poligs[i] = robo.deformaPolig(poligs[i])
-                        
+		print "Busca de rotas para robos não-pontuais não implementado ainda"
 
-	
+	#poligs.pop(0) #Tira o robo da lista de polígonos
 	pontos = []
 	for i in range(len(poligs)):
 		poligs[i] = Polygon(poligs[i])

@@ -6,6 +6,7 @@ from geocomp.common.point import Point
 from geocomp.common import control
 from geocomp.common.segment import Segment
 from geocomp.common.prim import *
+import math
 
 
 def intersectaProp(seg1, seg2):
@@ -36,4 +37,130 @@ def noCone(a, b, c, d):
 		return (left(b,d,a) and left(d,b,c))
 	else:
 		return not (left_on(d,b,a) and left_on(b,d,c))
+
+
+"""
+Essa função pega uma lista e da um roll de n. Vou explicar
+melhor depois...
+
+
+"""
+
+
+def shift(seq, n):
+        return seq[n:] + seq[:n]
+
+
+
+"""
+Angulo formado entre p1->p2 e o eixo x no sentido
+anti-horário 
+
+"""
+
+def anguloX(p1, p2):
+        dx = p2.x - p1.x
+        dy = p2.y - p1.y
+        if(dy == 0 and dx == 0): return 0
+        if(dy >= 0): return math.atan2(dy, dx)
+        #dy é negativo
+        return math.atan2(dy,dx) + 2*math.pi
+
+
+"""
+
+Retorna -1 se ang(v1,v2) < ang(w1,w2)
+Retorna 0 se ang(v1,v2) == ang(w1,w2)
+Retorna 1 se ang(v1,v2) > ang(w1,w2)
+
+"""
+
+def menorAnguloX(v1,v2, w1, w2):
+        a = Point(v2.x - v1.x, v2.y - v1.y)
+        b = Point(w2.x - w1.x, w2.y - w1.y)
+        if((a.y >= 0) != (b.y >= 0)):
+                if(a.y >= 0):
+                        return -1
+                else: 
+                        return 1
+        else:
+                if(left(Point(0,0), a, b)):
+                        return -1;
+                elif(right(Point(0,0), a, b)):
+                        return 1;
+                else: return 0;
+                
+                
+
+
+
+"""
+Retorna o polígono que seria a soma de minkowski
+de dois poligonos com lista de pontos l1 e l2
+
+
+"""
+
+
+
+def somaMinkowski(lista1, lista2):
+        n = len(lista1); m = len(lista2);
+        #l1 e l2 serão as listas deslocadas de forma que
+        #o primeiro ponto tenha coordenada minima dentre os
+        #pontos do polígono
+        
+        pmin = lista1[0]
+        imin = 0
+        for i in range(len(lista1)):
+                p = lista1[i]
+                if(p.y < pmin.y):
+                        pmin = p
+                        imin = i
+                elif(p.y == pmin.y and p.x < pmin.x):
+                        pmin = p
+                        imin = i
+        l1 = shift(lista1, imin)
+        
+        pmin = lista2[0]
+        imin = 0
+        for i in range(len(lista2)):
+                p = lista2[i]
+                if(p.y < pmin.y):
+                        pmin = p
+                        imin = i
+                elif(p.y == pmin.y and p.x < pmin.x):
+                        pmin = p
+                        imin = i
+        l2 = shift(lista2, imin)
+
+        print "Pontos mínimos: ", l1[0], l2[0]
+        # adicionando sentinelas...
+
+        l2.append(l2[0]); l2.append(l2[1]);
+        l1.append(l1[0]); l1.append(l1[1]);
+
+
+        i = 0; j = 0;
+        soma = []
+        while True:
+                soma.append(Point(l1[i].x + l2[j].x, l1[i].y + l2[j].y))
+                print "vi:", l1[i]
+                print "wj:", l2[j]
+                print "i: %d/%d\n" % (i,m)
+                print "j: %d/%d\n" % (j,m)
+                ang1 = anguloX(l1[i],l1[i+1])
+                ang2 = anguloX(l2[j],l2[j+1])
+
+                print "Ang1: %f Ang2: %f \n" % (ang1, ang2)
+                if(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == -1): 
+                        i = i + 1
+                elif(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == 1): 
+                        j = j + 1
+                else:
+                        i = i + 1
+                        j = j + 1
+                if(i == n and j == m): break;
+        
+        return soma
+
 
