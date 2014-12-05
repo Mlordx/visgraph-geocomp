@@ -32,21 +32,32 @@ def visGraphAlg(l):
 	poligs = leEntrada(l)
 
 	robo = poligs[0]
-	destino = poligs[1][0] #Suponho ser um ponto
+        destino = None
+
 	if(len(robo) == 1):
 		print "Robo ponto na posicao ", robo[0] 
 		probo = robo[0]
 		probo.hilight('green')
+                destino = poligs[1][0] #Suponho ser um ponto
 	else:
+                for p in robo:
+                        p.unplot()
 		robo = Robo(robo)
-                probo = poligs[1]
+                probo = poligs[1][0] # Suponho ser um ponto
+                Polygon(robo.getPontos(probo.x, probo.y)).plot("yellow")
                 poligs.pop(0) #Removo o polígono do robo da lista, iremos tratar só com o ponto
+                destino = poligs[1][0] # Suponho ser um ponto
                 for i in range(len(poligs)):
                         if(len(poligs[i]) > 1):
-                                Polygon(poligs[i]).hilight("cyan")
+                                Polygon(poligs[i]).plot("cyan")
                                 poligs[i] = robo.deformaPolig(poligs[i])
+                                Polygon(poligs[i]).plot()
+
+        
+        control.sleep()
                         
 
+        
 	
 	pontos = []
 	for i in range(len(poligs)):
@@ -109,9 +120,10 @@ def visGraphAlg(l):
 
 
 
-	if(G.adjacente(probo.i, destino.i)): print "WAAAAAAAAAAAAAAAT"
+	if(G.adjacente(probo.i, destino.i)): print "QUE"
+        print "Caminho de até:", probo.i, destino.i
 	path, dist = G.dijkstra(probo.i, destino.i)
-	print path
+	print "Caminho:", path
 	for i in range(len(path)-1):
 		v = path[i]; u = path[i+1]
 		pontos[v].lineto(pontos[u], 'red')

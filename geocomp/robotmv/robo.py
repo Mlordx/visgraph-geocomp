@@ -10,6 +10,7 @@ Classe que define o robo
 
 #from geocomp.common.segment import Segment
 #from geocomp.common.prim import *
+from geocomp.common.control import *
 from geocomp.common.point import Point
 from minhasPrim import *
 from geocomp.common.polygon import Polygon
@@ -24,7 +25,14 @@ class Robo:
         
         def __init__(self, pontos):
 		  self.pontos = pontos
-                
+
+        """
+        def plot(self, xoff, yoff, color=config.COLOR_POINT):
+                pontos = self.getPontos(xoff, yoff)
+                for p in pontos:
+                        p.plot()
+                        
+        """             
 
         """
 
@@ -36,7 +44,7 @@ class Robo:
         def getPontos(self, xoff, yoff):
             lista2 = []
             for p in self.pontos:
-                    lista2.append(Point(p.x, p.y))
+                    lista2.append(Point(p.x + xoff, p.y + yoff))
             return (lista2)
 
         """

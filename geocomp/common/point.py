@@ -23,6 +23,16 @@ class Point:
 							config.RADIUS)
 		return self.plot_id
 
+        ################### VICTOR MUDOU #######################
+
+        def unplot(self, id = None):
+                if id == None: id = self.plot_id
+                control.plot_delete(id)
+
+
+
+        ################## FIM ############################
+
 	def hilight (self, color=config.COLOR_HI_POINT):
 		"Desenha o ponto com 'destaque' (raio maior e cor diferente)"
 		self.hi = control.plot_disc (self.x, self.y, color,
