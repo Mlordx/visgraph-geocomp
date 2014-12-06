@@ -120,8 +120,8 @@ def visGraphAlg(l):
 
 
 
-	if(G.adjacente(probo.i, destino.i)): print "QUE"
-        print "Caminho de até:", probo.i, destino.i
+	#if(G.adjacente(probo.i, destino.i)): print "QUE"
+	print "Caminho de até:", probo.i, destino.i
 	path, dist = G.dijkstra(probo.i, destino.i)
 	print "Caminho:", path
 	for i in range(len(path)-1):
@@ -269,10 +269,10 @@ def visivel(T, S, p, i):
 			print "Seg min é null"
 			return a.visivel
 		print "Testando intersec com min"
-		#segMin.hilight('blue')
+		idH = segMin.hilight('cyan')
 		print segMin
 		control.sleep()
-		#segMin.hilight('yellow')
+		segMin.hide(idH)
 		a.visivel = not intersectaProp(segMin, Segment(p,a)) 
 	elif( not S[i-1].visivel ):
 		print "Anterior não é visível"
@@ -284,9 +284,25 @@ def visivel(T, S, p, i):
 				print "Falhou no cone 2"
 				return a.visivel
 
-		seg2 = T.procuraInter(Segment(S[i-1],a))
-		print "Testando o segmento do meio"
-		a.visivel = (seg2 is None)
+		segTemp = Segment(S[i-1],a)
+	#	seg2 = T.procuraInter(segTemp)
+		seg2 = T.getProx(S[i-1])
+		idH = segTemp.hilight("cyan")
+		print "Testando o segmento do meio" ####deu problema
+		control.sleep()
+		segTemp.hide(idH)
+		#### teste
+		if(seg2 is None): 
+			print "Deu null!!!"
+			a.visivel = True
+		else:
+			idH = seg2.hilight("yellow") 
+			a.visivel = not intersectaProp(seg2, segTemp)
+			control.sleep()
+			seg2.hide(idH)
+
+		### fim teste
+	#	a.visivel = (seg2 is None)
 	return a.visivel
 
 
@@ -328,6 +344,7 @@ def verticesVisiveis(p, poligs):
 				p.lineto(a, 'blue')
 			else: continue; #será?
 		else: p.remove_lineto(a)
+		control.sleep()
 		b = a.prev; c = a.next;
 		
 		if( a.x == b.x and a.y == b.y): continue #a não está em um

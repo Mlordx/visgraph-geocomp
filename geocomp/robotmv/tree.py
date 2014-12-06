@@ -93,6 +93,9 @@ class Folha:
 		return ret
 
 
+	def getProx(self, p):
+		return self.key
+
 
 """
 	#Delete antigo da célula
@@ -195,6 +198,13 @@ class InCel:
 			else:
 				return self.r.procuraInter(seg)
 
+	def getProx(self, p):
+		x = self.key
+		if(left_on(x.init, x.to,p)):
+			return self.l.getProx(p)
+		else:
+			return self.r.getProx(p)
+
 	def __repr__(self, level=0):
 		ret = "\t"*level+repr(self.key)+"\n"
 		ret += self.l.__repr__(level+1)
@@ -223,6 +233,9 @@ class Tree:
 		self.root = self.root.delete(x)
 		#self.root = self.root.delete(x,None)
 		#print self
+
+	def getProx(self,p):
+		return self.root.getProx(p)
 
 	def procuraInter(self, seg):
 		self.root.procuraInter(seg);
