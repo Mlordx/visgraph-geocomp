@@ -63,10 +63,11 @@ class Folha:
 			if(right(s.init, s.to, x.init)):
 				return InCel(x, Folha(x), Folha(s))
 			elif(collinear(s.init, s.to, x.init)):
-				if(right(x.init, x.to, s.init)):
-					return InCel(s, Folha(s), Folha(x))
-				else:
+				if(right(s.init, s.to, x.to)):
 					return InCel(x, Folha(x), Folha(s))
+				else:
+					return InCel(s, Folha(s), Folha(x))
+					
 			else:
 				return InCel(s, Folha(s), Folha(x))
 
@@ -127,7 +128,7 @@ class InCel:
 			self.l = self.l.delMax()
 			if(isinstance(self.l,Folha) and self.l.key is None): #self.l era folha
 				return self.r
-			self.key = self.r.getMax()
+			self.key = self.l.getMax()
 			return self
 		if(right(s.init, s.to, x.to)): # Compara com o fim de X.... pensar melhor depois
 			print "TUDO A DIREITA NA DELEÇÃO"
@@ -170,11 +171,11 @@ class InCel:
 		if(right(s.init, s.to, x.init)):
 			self.l = self.l.insert(x)
 		elif(collinear(s.init, s.to, x.init)):
-			if(right(x.init, x.to, s.init)): # MUDEI, EXPERIEMTNANDO. 
-											 #Antigo: right(s.init, s.to, x.to), com if e else invertido
-				self.r = self.r.insert(x)
-			else:
+			if(right(s.init, s.to, x.to)): 
+
 				self.l = self.l.insert(x)
+			else:
+				self.r = self.r.insert(x)
 		else:
 			self.r = self.r.insert(x)
 		return self
@@ -200,7 +201,7 @@ class InCel:
 
 	def getProx(self, p):
 		x = self.key
-		if(left_on(x.init, x.to,p)):
+		if(right(x.init, x.to,p)):
 			return self.l.getProx(p)
 		else:
 			return self.r.getProx(p)
@@ -229,8 +230,10 @@ class Tree:
 
 	def delete(self, x):
 		print "Tentando deletar:", x
-		if(PINTA): x.plot('red')
+		idH =  x.plot('red')
 		self.root = self.root.delete(x)
+		control.sleep()
+		x.hide(idH)
 		#self.root = self.root.delete(x,None)
 		#print self
 

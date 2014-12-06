@@ -330,20 +330,25 @@ def verticesVisiveis(p, poligs):
 	for i in range(len(pontos)):
 		a = pontos[i]
 
-		p.lineto(a, 'white')
+		idBranco = p.lineto(a, 'white')
 		a.hilight('yellow')
 		control.sleep()
 		a.hilight('red')
 		a.unhilight()
 
+		print "############## ANTES #############"
+		print T
+		print "################################"
 
 		if(visivel(T, pontos, p, i)): 
 			#print "VISIVEL"
 			if(a is not p):
 				W.append(a)
+				p.remove_lineto(a, idBranco)
 				p.lineto(a, 'blue')
 			else: continue; #será?
-		else: p.remove_lineto(a)
+		else: p.remove_lineto(a, idBranco)
+
 		control.sleep()
 		b = a.prev; c = a.next;
 		
@@ -352,13 +357,28 @@ def verticesVisiveis(p, poligs):
 
 
 		print "Vish ", i, pontos[i]
-		if(left_on(p,a,b)): T.delete(Segment(b,a))
-		else: T.insert(Segment(a,b))
+		if(left_on(p,a,b)):
+			T.delete(Segment(b,a))
+			print "############# PRIMEIRA DEL ##########"
+			print T
+			print "##################################"
+
+
 		#print T
 		if(left_on(p,a,c)): T.delete(Segment(c,a))
-		else: T.insert(Segment(a,c))
-		#print T;
-	#	print "Oie~", i
+		else:
+			print "############# PRIMEIRA INS ##########"
+			print T
+			print "##################################" 
+			T.insert(Segment(a,c))
+		#else do primeiro if
+		#Tentando evitar q na hora da inserção tenha segmentos terminando
+		#na linha de varredura...será?		
+		if(right(p,a,b)): T.insert(Segment(a,b)) 
+		print "########### DEPOIS #############"
+		print T;
+		print "#######################"
+
 
 	return W
 
