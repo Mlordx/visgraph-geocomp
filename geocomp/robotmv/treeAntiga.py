@@ -36,7 +36,6 @@ PINTA = False;
 class Folha:
 	def __init__(self, key):
 		self.key = key
-		self.red = False
 
 
 
@@ -62,15 +61,15 @@ class Folha:
 			return self
 		else:
 			if(right(s.init, s.to, x.init)):
-				return InCel(x, Folha(x), Folha(s), True)
+				return InCel(x, Folha(x), Folha(s))
 			elif(collinear(s.init, s.to, x.init)):
 				if(right(s.init, s.to, x.to)):
-					return InCel(x, Folha(x), Folha(s), True)
+					return InCel(x, Folha(x), Folha(s))
 				else:
-					return InCel(s, Folha(s), Folha(x), True)
+					return InCel(s, Folha(s), Folha(x))
 					
 			else:
-				return InCel(s, Folha(s), Folha(x), True)
+				return InCel(s, Folha(s), Folha(x))
 
 	#Deleta a folha mais a direita. E retorna o irmão esquerdo dessa folha
 	def delMax(self):
@@ -116,11 +115,10 @@ class Folha:
 
 
 class InCel:
-	def __init__(self, key, left, right, red):
+	def __init__(self, key, left, right):
 		self.r = right
 		self.l = left
 		self.key = key
-		self.red = red
 
 
 
@@ -180,17 +178,6 @@ class InCel:
 				self.r = self.r.insert(x)
 		else:
 			self.r = self.r.insert(x)
-
-
-		# Balanceamento da rubro-negra
-
-		if(self.r.red and not self.l.red): self = self.rotateL()
-		if(self.l.red and self.l.l.red): self = self.rotateR()
-		if(self.l.red and self.r.red): self.colorFlip()
-
-
-
-
 		return self
 
 	def getMin(self):
@@ -219,27 +206,6 @@ class InCel:
 		else:
 			return self.r.getProx(p)
 
-	def rotateL(self):
-		x = self.r
-		self.r = x.l
-		x.l = self
-		x.red = self.red
-		self.red = True
-		return x
-
-	def rotateR(self):
-		x = self.l
-		self.l = x.r
-		x.r = h
-		x.red = h.red
-		h.red = True
-		return x
-
-	def colorFlip(self):
-		self.red = True
-		self.r.red = False
-		self.l.red = False
-
 	def __repr__(self, level=0):
 		ret = "\t"*level+repr(self.key)+"\n"
 		ret += self.l.__repr__(level+1)
@@ -257,7 +223,6 @@ class Tree:
 		print "Entrando2: ", x
 		if(PINTA): x.hilight('yellow')
 		self.root = self.root.insert(x)
-		self.root.red = False
 		#print self
 
 	def getMin(self):
