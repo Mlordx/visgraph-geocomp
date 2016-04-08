@@ -13,6 +13,7 @@ import visgraph
 #  [ 'nome-do-modulo', 'nome-da-funcao', 'nome do algoritmo' ]
 children = ( 
 	( 'visgraph', 'visGraphAlg', 'Grafo de visibilidade' ),
+	( 'visgraph', 'desenhaTudo', 'Desenha')
 	
 )
 

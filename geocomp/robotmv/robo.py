@@ -26,13 +26,7 @@ class Robo:
         def __init__(self, pontos):
 		  self.pontos = pontos
 
-        """
-        def plot(self, xoff, yoff, color=config.COLOR_POINT):
-                pontos = self.getPontos(xoff, yoff)
-                for p in pontos:
-                        p.plot()
-                        
-        """             
+                
 
         """
 
@@ -59,10 +53,6 @@ class Robo:
 
         def deformaPolig(self, polig):
             pontosNeg = [Point(-p.x, -p.y) for p in self.pontos]
-            #  j = len(self.pontos)-1;
-            #  for i in range(len(self.pontos)):
-            #          p = self.pontos[i]
-            #          pontosNeg[j-i] = Point(-p.x, -p.y)
             return somaMinkowski(pontosNeg, polig)
 
 

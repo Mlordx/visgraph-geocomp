@@ -16,21 +16,7 @@ DEFINES DE CONTROLE
 
 PINTA = False;
 
-
-#Deleão antiga de folha
-"""
-		#Cheio das pogz
-	def delete(self,x,carry):
-		s = self.key
-		#if(carry is None): return self #Não achou(??)
-		if(s is None): return Folha(None) #wtf
-		if(s.init == x.init and s.to == x.to): #Deveria sempre ser True
-			print "Ok"
-		else:
-			print "Vish~"
-		if(carry is None): return Folha(None)
-		return carry
-"""
+###################################3
 
 
 class Folha:
@@ -42,15 +28,12 @@ class Folha:
 
 	def delete(self,x):
 		s = self.key
-		#if(carry is None): return self #Não achou(??)
 		if(s is None): 
-			print "FOLHA NULL?? QUE. Estava tentando deletar: ", x
-			return Folha(None) #wtf
+			return self 
 		if(s.init == x.init and s.to == x.to): #Deveria sempre ser True
-			print "Ok"
 			return Folha(None);
 		else:
-			print "Deleção falhou, chegou em:", self.key
+			# Deleção falhou
 			return self
 
 
@@ -76,8 +59,8 @@ class Folha:
 	def delMax(self):
 		return Folha(None);
         
-        def delMin(self):
-                   return Folha(None)
+	def delMin(self):
+		return Folha(None)
 		
 
 	def getMin(self):
@@ -102,21 +85,6 @@ class Folha:
 		return self.key
 
 
-"""
-	#Delete antigo da célula
-	def delete(self, x, carry): #############################################
-		s = self.key
-		if(s.init == x.init and s.to == x.to): #Achou o nó interno com chave igual
-			carry = self.r
-			self.l = self.l.delete(x, carry)
-			return self.l #?
-		if(right_on(s.init, s.to, x.to)): # Compara com o fim de X.... pensar melhor depois
-			self.l = self.l.delete(x, carry)
-		else:
-			self.r = self.r.delete(x, carry)
-		return self
-"""
-
 
 class InCel:
 	def __init__(self, key, left, right, red):
@@ -129,134 +97,129 @@ class InCel:
 
 	def delete(self,x):
 		s = self.key
-		if(s.init == x.init and s.to == x.to): #Achou o nó interno com chave igual
-                        ### Balanceamento da rubro negra #####
-                        #Eu sei que vou deletar algo (o max) da esquerda
-                        #Preciso manter a invariante
+		if(s.init == x.init and s.to == x.to):
+			#Achou o nó interno com chave igual
+			### Balanceamento da rubro negra #####
+			#Eu sei que vou deletar algo (o max) da esquerda
+			#Preciso manter a invariante
 
-                        #Filho esquerdo é folha. Tentamos deletar. Se não der certo, não achou
-                        # x na árvore. se der certo, retornamos o filho direito (Também folha)
-                        if(isinstance(self.l, Folha)):
-                                self.l = self.l.delete(x)
-                                if(self.l.key is None): #Conseguiu deletar
-                                        return self.r
-                                else: #Não achou x
-                                        return self
+			#Filho esquerdo é folha. Tentamos deletar. Se não der certo, não achou
+			# x na árvore. se der certo, retornamos o filho direito (Também folha)
+			if(isinstance(self.l, Folha)):
+			        self.l = self.l.delete(x)
+			        if(self.l.key is None): #Conseguiu deletar
+			                return self.r
+			        else: #Não achou x
+			                return self
 
-                        #Caso contrário, nos preparamos para deletar algo a esquerda
-                        if(not self.l.red and not self.l.l.red):
-                                self = self.moveRedLeft()                       
+			#Caso contrário, nos preparamos para deletar algo a esquerda
+			if(not self.l.red and not self.l.l.red):
+			        self = self.moveRedLeft()                       
 
-                        ######################################
+			######################################
 
 			self.l = self.l.delMax()
 
 			self.key = self.l.getMax()
 			
-		elif(right(s.init, s.to, x.to)): # Compara com o fim de X
-                        ### Balanceamento da rubro negra ####
-                        
+		elif(right(s.init, s.to, x.to)): 
+			# Compara com o fim de X
+			### Balanceamento da rubro negra ####
 
-                        #Verifico se filho esquerdo é folha. Se for, o filho
-                        #esquerdo vai ser igual a key atual, e portanto não
-                        #achamos x na árvore. Verifico a key só para fins de
-                        #depuração
-                        if(isinstance(self.l, Folha)):
-                                if(self.l.key.init == x.init and self.l.key.to == self.l.key.to):
-                                        #problema
-                                        print "Esse caso (1) não deveria acontecer. Erro!"
-                                return self
 
-                        #Filho esquerdo não é folha, e a deleção vai para a esquerda.
-                        #Preparamos a árvore para manter a invariante
-                        if(not self.l.red and not self.l.l.red):
-                                self = self.moveRedLeft() 
-                                
-                        #################################
+			#Verifico se filho esquerdo é folha. Se for, o filho
+			#esquerdo vai ser igual a key atual, e portanto não
+			#achamos x na árvore. Verifico a key só para fins de
+			#depuração
+			if(isinstance(self.l, Folha)):
+			        if(self.l.key.init == x.init and self.l.key.to == self.l.key.to):
+			                #problema
+			                print "Esse caso (1) não deveria acontecer. Erro!"
+			        return self
+
+			#Filho esquerdo não é folha, e a deleção vai para a esquerda.
+			#Preparamos a árvore para manter a invariante
+			if(not self.l.red and not self.l.l.red):
+			        self = self.moveRedLeft() 
+			        
+			#################################
 
 			self.l = self.l.delete(x)
 
 		elif(collinear(s.init, s.to, x.to)):
 			if(right(s.init, s.to, x.init)):
-                                ### Balanceamento da rubro negra ###
-                                
-                                #Exatamente igual ao caso anterior
+				### Balanceamento da rubro negra ###
+				#Exatamente igual ao caso anterior
 
-                                if(isinstance(self.l, Folha)):
-                                        if(self.l.key.init == x.init and self.l.key.to == self.l.key.to):
-                                                #problema
-                                                print "Esse caso (2) não deveria acontecer. Erro!"
-                                        return self
+				if(isinstance(self.l, Folha)):
+				        if(self.l.key.init == x.init and self.l.key.to == self.l.key.to):
+				                #problema
+				                print "Esse caso (2) não deveria acontecer. Erro!"
+				        return self
 
-                                #Filho esquerdo não é folha, e a deleção vai para a esquerda.
-                                #Preparamos a árvore para manter a invariante
-                                if(not self.l.red and not self.l.l.red):
-                                        self = self.moveRedLeft() 
-                                
-
-
-
-                                ##########################################
-
-
-
+				#Filho esquerdo não é folha, e a deleção vai para a esquerda.
+				#Preparamos a árvore para manter a invariante
+				if(not self.l.red and not self.l.l.red):
+				        self = self.moveRedLeft() 
+				##########################################
 				self.l = self.l.delete(x)
                 
 			else:
-                                ### Balanceamento da rubro negra ###
-                                
-                                #Se o filho direito é folha, tenta deletar
-                                if(isinstance(self.r, Folha)):
-                                        self.r = self.r.delete(x)
-                                        if(self.r.key is None): #Nó direito era x
-                                                return self.l
-                                        else: #Não encontrou x
-                                                return self.balanceia() #(Precisa balancear?)
+				### Balanceamento da rubro negra ###
 
-                                #Filho direito não é folha. Deleção vai se propagar para
-                                # a direita. Vamos preparar a invariante da árvore
-                                if(not self.r.red and not self.r.l.red):
-                                        self = self.moveRedRight()                                
+				#Se o filho direito é folha, tenta deletar
+				if(isinstance(self.r, Folha)):
+				        self.r = self.r.delete(x)
+				        if(self.r.key is None): #Nó direito era x
+							self.l.red = False #Corrigi balanceamento
+							return self.l
+				        else: #Não encontrou x
+				                return self.balanceia() #(Precisa balancear?)
 
-                                ###################################
+				#Filho direito não é folha. Deleção vai se propagar para
+				# a direita. Vamos preparar a invariante da árvore
+				if(not self.r.red and not self.r.l.red):
+				        self = self.moveRedRight()                                
+
+				###################################
 
 				self.r = self.r.delete(x)
                 				
 		else:
+
 			### Balanceamento da rubro negra ####
+			#Mesma coisa que o caso anterior
+			if(isinstance(self.r, Folha)):
+			    self.r = self.r.delete(x)
+			    if(self.r.key is None): #Nó direito era x
+			    	self.l.red = False #Corrigi balanceamento
+			    	return self.l
+			    else: #Não encontrou x
+			    	return self.balanceia() #(Precisa balancear?)
+			    
+			if(not self.r.red and not self.r.l.red):
+				self = self.moveRedRight()
 
-                        #Mesma coisa que o caso anterior
-                        if(isinstance(self.r, Folha)):
-                                self.r = self.r.delete(x)
-                                if(self.r.key is None): #Nó direito era x
-                                        return self.l
-                                else: #Não encontrou x
-                                        return self.balanceia() #(Precisa balancear?)
-                                
-                                if(not self.r.red and not self.r.l.red):
-                                        self = self.moveRedRight()
-
-                        ########################################
+			########################################
 			self.r = self.r.delete(x)
 		return self.balanceia()
 
 
         """
           Deleta a maior Folha, e coloca no lugar do pai dessa folha uma folha
-        com seu predecessor. Explicado melhor no relatório
+        com seu predecessor.
         """
 
 	def delMax(self):
-                if(self.l.red): self = self.rotateR()
-                if(isinstance(self.r, Folha)): return self.l #Folha com o predecessor do max.
+		if(self.l.red): self = self.rotateR()
+		if(isinstance(self.r, Folha)): return self.l #Folha com o predecessor do max.
 
-                if(not self.r.red and not self.r.l.red):
-                        self = self.moveRedRight()
+		if(not self.r.red and not self.r.l.red):
+			self = self.moveRedRight()
 
-                
+
 		self.r = self.r.delMax();
-	#	if(isinstance(self.r, Folha) and self.r.key is None): #self.r era folha
-	#		return self.l;
+
 		return self;
 
 	def getMax(self):
@@ -280,9 +243,6 @@ class InCel:
 		# Balanceamento da rubro-negra
 
 		self = self.balanceia()
-
-
-
 		return self
 
 	def getMin(self):
@@ -303,22 +263,18 @@ class InCel:
 				return self.l.procuraInter(seg)
 			else:
 				return self.r.procuraInter(seg)
+	
+	def delMin(self):
+		if(isinstance(self.l, Folha)):
+			return self.r #Que provavelmente é folha também.
+            
+		if(not self.l.red and not self.l.l.red):
+			self = self.moveRedLeft()
 
-        """
-        Deleta a menor folha
-        """
+		self.l = self.l.deleteMin()
+		self = self.balanceia()
 
-        def delMin(self):
-                if(isinstance(self.l, Folha)):
-                        return self.r #Que provavelmente é folha também.
-                
-                if(not self.l.red and not self.l.l.red):
-                        self = self.moveRedLeft()
-
-                self.l = self.l.deleteMin()
-                self = self.balanceia()
-
-                return self;
+		return self;
 
 	def getProx(self, p):
 		x = self.key
@@ -343,31 +299,33 @@ class InCel:
 		self.red = True
 		return x
         
-        """
-         Faz ou o nó da direita ser vermelho, ou seu filho direito ser vermelho.
-        """
-        def moveRedRight(self):
-                self.colorFlip()
-                if(self.l.l.red):
-                        self = self.rotateR()
-                        self.colorFlip()
-                return self
+    ##############
+    # Faz ou o nó da direita ser vermelho, ou seu filho direito ser vermelho.
+    ###############
+	def moveRedRight(self):
+		self.colorFlip()
+		if(self.l.l.red):
+			self = self.rotateR()
+			self.colorFlip()
+		return self
 
-        """
-         Faz ou o nó da esquerda ser vermelho, ou o filho esquerdo do nó esquerdo
-        """
-        def moveRedLeft(self):
-                self.colorFlip()
-                if(self.r.l.red):
-                        self.r = self.r.rotateR()
-                        self = self.rotateL()
+    ##########3
+    # Faz ou o nó da esquerda ser vermelho, ou o filho esquerdo do nó esquerdo
+    ############
+	def moveRedLeft(self):
+		self.colorFlip()
+		if(self.r.l.red):
+			self.r = self.r.rotateR()
+			self = self.rotateL()
+			self.colorFlip()
+		return self
 
-        def balanceia(self):
-                if(self.r.red and not self.l.red): self = self.rotateL()
+	def balanceia(self):
+		if(self.r.red and not self.l.red): self = self.rotateL()
 		if(self.l.red and self.l.l.red): self = self.rotateR()
 		if(self.l.red and self.r.red): self.colorFlip()
-                return self;
-             
+		return self;
+         
 
 
 
@@ -377,7 +335,9 @@ class InCel:
 		self.l.red = not self.l.red
 
 	def __repr__(self, level=0):
-		ret = "\t"*level+repr(self.key)+"\n"
+		ret = ""
+		if(self.red): ret += "#"
+		ret += "\t"*level+repr(self.key)+"\n"
 		ret += self.l.__repr__(level+1)
 		ret += self.r.__repr__(level+1)
 		return ret
@@ -390,23 +350,19 @@ class Tree:
 		self.root = Folha(None)
 
 	def insert(self, x):
-		print "Entrando2: ", x
 		if(PINTA): x.hilight('yellow')
 		self.root = self.root.insert(x)
 		self.root.red = False
-		#print self
+
 
 	def getMin(self):
 		return self.root.getMin()
 
 	def delete(self, x):
-		print "Tentando deletar:", x
-		idH =  x.plot('red')
+		self.root.red = True
 		self.root = self.root.delete(x)
-		control.sleep()
-		x.hide(idH)
-		#self.root = self.root.delete(x,None)
-		#print self
+		self.root.red = False
+	
 
 	def getProx(self,p):
 		return self.root.getProx(p)

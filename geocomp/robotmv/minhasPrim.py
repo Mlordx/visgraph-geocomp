@@ -133,7 +133,6 @@ def somaMinkowski(lista1, lista2):
                         imin = i
         l2 = shift(lista2, imin)
 
-        print "Pontos mínimos: ", l1[0], l2[0]
         # adicionando sentinelas...
 
         l2.append(l2[0]); l2.append(l2[1]);
@@ -144,27 +143,15 @@ def somaMinkowski(lista1, lista2):
         soma = []
         while True:
                 soma.append(Point(l1[i].x + l2[j].x, l1[i].y + l2[j].y))
-                print "vi:", l1[i]
-                print "wj:", l2[j]
-                print "i: %d/%d\n" % (i,m)
-                print "j: %d/%d\n" % (j,m)
-                ang1 = anguloX(l1[i],l1[i+1])
-                ang2 = anguloX(l2[j],l2[j+1])
-
-                print "Ang1: %f Ang2: %f \n" % (ang1, ang2)
-
                 
 
-                
-
-                
-
-                ##### POG #####
+                ### condições de parada
                 if(i == n):
                         j = j + 1
                 elif(j == m):
                         i = i + 1
-                ##### FIM DA POG ####
+                #####
+
                 elif(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == -1): 
                         i = i + 1
                 elif(menorAnguloX(l1[i],l1[i+1],l2[j],l2[j+1]) == 1): 
