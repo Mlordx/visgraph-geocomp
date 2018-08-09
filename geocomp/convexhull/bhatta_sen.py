@@ -33,7 +33,7 @@ def bhatta_sen_upper_rec (a, b, S):
 	while again:
 		if len (S) == 1:
 			return [ S[0] ]
-		j = int (random.uniform (0, len (S)/2))
+		j = int (random.uniform (0, len (S)//2))
 		again = 0
 
 		p1 = S[2*j+1]
@@ -82,7 +82,7 @@ def bhatta_sen_upper_rec (a, b, S):
 	#map (lambda p: p.unhilight (), S)
 	control.sleep ()
 	cont = []
-	for j in range (0, len(S)/2):
+	for j in range (0, len(S)//2):
 		cont.extend ([2*j, 2*j+1])
 		if S[2*j].x < S[2*j+1].x:
 			p1 = S[2*j]
@@ -120,7 +120,7 @@ def bhatta_sen_upper_rec (a, b, S):
 		S2.append (S[-1])
 	control.sleep ()
 	
-	map (lambda p: p.hilight (), S1)
+	list(map (lambda p: p.hilight (), S1))
 	control.sleep ()
 	
 	# step 6
@@ -130,9 +130,9 @@ def bhatta_sen_upper_rec (a, b, S):
 			p.unhilight ()
 
 	control.sleep ()
-	map (lambda p: p.unhilight (), S1)
+	list(map (lambda p: p.unhilight (), S1))
 	control.sleep ()
-	map (lambda p: p.hilight (), S2)
+	list(map (lambda p: p.hilight (), S2))
 	control.sleep ()
 
 	for p in S2[:]:
@@ -140,7 +140,7 @@ def bhatta_sen_upper_rec (a, b, S):
 			S2.remove (p)
 			p.unhilight ()
 	control.sleep ()
-	map (lambda p: p.unhilight (), S2)
+	list(map (lambda p: p.unhilight (), S2))
 
 	# step 7
 	ret1 = []
@@ -161,7 +161,7 @@ def bhatta_sen_upper_rec (a, b, S):
 
 	return ret2
 
-#ok, eu fiquei com preguiça e simplesmente copiei/colei a funcao 
+#ok, eu fiquei com preguia e simplesmente copiei/colei a funcao 
 # abaixo, que e' simetrica `a acima
 def bhatta_sen_lower_rec (a, b, S):
 	"""Constroi a parte inferior do fecho convexo"""
@@ -175,7 +175,7 @@ def bhatta_sen_lower_rec (a, b, S):
 	while again:
 		if len (S) == 1:
 			return [ S[0] ]
-		j = int (random.uniform (0, len (S)/2))
+		j = int (random.uniform (0, len (S)//2))
 		again = 0
 
 		p1 = S[2*j+1]
@@ -223,7 +223,7 @@ def bhatta_sen_lower_rec (a, b, S):
 	#map (lambda p: p.unhilight (), S)
 	control.sleep ()
 	cont = []
-	for j in range (0, len(S)/2):
+	for j in range (0, len(S)//2):
 		cont.extend ([2*j, 2*j+1])
 		if S[2*j].x < S[2*j+1].x:
 			p1 = S[2*j]
@@ -261,7 +261,7 @@ def bhatta_sen_lower_rec (a, b, S):
 		S2.append (S[-1])
 	control.sleep ()
 	
-	map (lambda p: p.hilight (), S1)
+	list(map (lambda p: p.hilight (), S1))
 	control.sleep ()
 	
 	# step 6
@@ -271,9 +271,9 @@ def bhatta_sen_lower_rec (a, b, S):
 			p.unhilight ()
 
 	control.sleep ()
-	map (lambda p: p.unhilight (), S1)
+	list(map (lambda p: p.unhilight (), S1))
 	control.sleep ()
-	map (lambda p: p.hilight (), S2)
+	list(map (lambda p: p.hilight (), S2))
 	control.sleep ()
 
 	for p in S2[:]:
@@ -281,7 +281,7 @@ def bhatta_sen_lower_rec (a, b, S):
 			S2.remove (p)
 			p.unhilight ()
 	control.sleep ()
-	map (lambda p: p.unhilight (), S2)
+	list(map (lambda p: p.unhilight (), S2))
 
 	# step 7
 	ret1 = []

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 """Algoritmos para o problema do Par Mais Distante:
 
-Dado um conjunto de pontos S, determinar dois cuja distancia entre eles é
+Dado um conjunto de pontos S, determinar dois cuja distancia entre eles 
 maxima
 
-Algoritmos disponíveis:
-- Força bruta
+Algoritmos disponveis:
+- Fora bruta
 - Diametro
 """
-import diameter
-import brute
+from . import diameter
+from . import brute
 
 children = [
 	[ 'diameter', 'Diameter', 'Diametro' ],
 	[ 'brute', 'Brute', 'Forca Bruta' ]
 ]
 
-__all__ = map (lambda a: a[0], children)
+__all__ = [a[0] for a in children]

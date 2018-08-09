@@ -7,7 +7,7 @@ Algoritmos disponíveis:
 - Grafo de visibilidade
 """
 
-import visgraph
+from . import visgraph
 
 # cada entrada deve ter:
 #  [ 'nome-do-modulo', 'nome-da-funcao', 'nome do algoritmo' ]
@@ -20,4 +20,4 @@ children = (
 #children = algorithms
 
 #__all__ = [ 'graham', 'gift' ]
-__all__ = map (lambda a: a[0], children)
+__all__ = [a[0] for a in children]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from ponto import *
-import control
+from . import control
 
 class Aresta:
 	def __init__ (self, pto_from=None, pto_to=None):
@@ -9,7 +9,7 @@ class Aresta:
 		self.to = pto_to
 	
 	def __repr__ (self):
-		return '[ '+`self.init`+'; '+`self.to`+' ]'
+		return '[ '+repr(self.init)+'; '+repr(self.to)+' ]'
 
 	def hilight (self, color_line='green', color_point='red'):
 		self.lid = self.init.lineto (self.to, color_line)

@@ -8,7 +8,7 @@
 
 from geocomp.common.segment import Segment
 from geocomp.common.prim import *
-from minhasPrim import *
+from .minhasPrim import *
 
 """
 DEFINES DE CONTROLE
@@ -134,7 +134,7 @@ class InCel:
 			if(isinstance(self.l, Folha)):
 			        if(self.l.key.init == x.init and self.l.key.to == self.l.key.to):
 			                #problema
-			                print "Esse caso (1) não deveria acontecer. Erro!"
+			                print("Esse caso (1) não deveria acontecer. Erro!")
 			        return self
 
 			#Filho esquerdo não é folha, e a deleção vai para a esquerda.
@@ -154,7 +154,7 @@ class InCel:
 				if(isinstance(self.l, Folha)):
 				        if(self.l.key.init == x.init and self.l.key.to == self.l.key.to):
 				                #problema
-				                print "Esse caso (2) não deveria acontecer. Erro!"
+				                print("Esse caso (2) não deveria acontecer. Erro!")
 				        return self
 
 				#Filho esquerdo não é folha, e a deleção vai para a esquerda.
@@ -169,17 +169,17 @@ class InCel:
 
 				#Se o filho direito é folha, tenta deletar
 				if(isinstance(self.r, Folha)):
-				        self.r = self.r.delete(x)
-				        if(self.r.key is None): #Nó direito era x
+					self.r = self.r.delete(x)
+					if(self.r.key is None): #Nó direito era x
 							self.l.red = False #Corrigi balanceamento
 							return self.l
-				        else: #Não encontrou x
-				                return self.balanceia() #(Precisa balancear?)
+					else: #Não encontrou x
+						return self.balanceia() #(Precisa balancear?)
 
 				#Filho direito não é folha. Deleção vai se propagar para
 				# a direita. Vamos preparar a invariante da árvore
 				if(not self.r.red and not self.r.l.red):
-				        self = self.moveRedRight()                                
+					self = self.moveRedRight()                                
 
 				###################################
 
@@ -205,10 +205,10 @@ class InCel:
 		return self.balanceia()
 
 
-        """
+	"""
           Deleta a maior Folha, e coloca no lugar do pai dessa folha uma folha
         com seu predecessor.
-        """
+	"""
 
 	def delMax(self):
 		if(self.l.red): self = self.rotateR()
@@ -370,7 +370,7 @@ class Tree:
 	def procuraInter(self, seg):
 		self.root.procuraInter(seg);
 
-        def delMin(self):
+	def delMin(self):
                 if(isinstance(self.root, Folha)): 
                         self.root.delMin()
                 elif(isinstance(self.root.l, Folha)): 

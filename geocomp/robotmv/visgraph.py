@@ -9,10 +9,11 @@ from geocomp.common import control
 from geocomp.common.segment import Segment
 from geocomp.common.guiprim import *
 from geocomp import config
-from tree import Tree
-from minhasPrim import *
-from graph import *
-from robo import Robo
+from .tree import Tree
+from .minhasPrim import *
+from .graph import *
+from .robo import Robo
+from functools import cmp_to_key
 
 
 """Função do algoritmo em si. Supomos aqui que:
@@ -32,12 +33,12 @@ def visGraphAlg(l):
 	poligs = leEntrada(l)
 
 	robo = poligs[0]
-        destino = None
+	destino = None
 
 	desenhaTudo(l) #Muito codigo igual ao de baixo...mas deixa
 
 	if(len(robo) == 1):
-		print "Robo ponto na posicao ", robo[0] 
+		print("Robo ponto na posicao ", robo[0]) 
 		probo = robo[0]
 		destino = poligs[1][0] #Suponho ser um ponto
 	else:
@@ -59,12 +60,12 @@ def visGraphAlg(l):
 		control.sleep()
 
 
-	probo.prev = probo.next = probo
+	probo.prev = probo.__next__ = probo
 
 	
 	
 	compara = criaCompara(probo)
-	pontos.sort(cmp = compara, reverse = True)
+	pontos.sort(key = cmp_to_key(compara), reverse = True)
 
 	
 	#Grafo
@@ -205,7 +206,7 @@ def visivel(T, S, p, i):
 		if(S[i-1].prev != S[i-1]): #S[i-1] esta em um polígono
 			if(noCone(S[i-1].prev, S[i-1], S[i-1].next, a)): 
 				a.visivel = False
-				print "Falhou no cone 2"
+				print("Falhou no cone 2")
 				return a.visivel
 
 		segTemp = Segment(S[i-1],a)
@@ -230,7 +231,7 @@ def verticesVisiveis(p, poligs):
 	#Intersecta p.x -> inf+
 	T = Tree();
 
-	pontos.sort(cmp = compara, reverse = True)
+	pontos.sort(key = cmp_to_key(compara), reverse = True)
 	for i in range(len(poligs)):
 		listaPs = poligs[i].to_list()
 		n = len(listaPs)
@@ -292,7 +293,7 @@ def  desenhaTudo(l):
 	probo = destino = None
 
 	if(len(robo) == 1):
-		print "Robo ponto na posicao ", robo[0] 
+		print("Robo ponto na posicao ", robo[0]) 
 		probo = robo[0]
 		probo.hilight('yellow')
 		destino = poligs[1][0] #Suponho ser um ponto

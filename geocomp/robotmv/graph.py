@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from myPriorityQueue import MyPriorityQueue
+from .myPriorityQueue import MyPriorityQueue
 
 
 class Grafo:

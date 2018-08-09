@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import control
+from . import control
 from geocomp import config
 
 class Polygon:
@@ -26,9 +26,9 @@ class Polygon:
 		ret = '[ '
 		p = self.pts
 		while p.next != self.pts:
-			ret = ret + `p` + ' '
+			ret = ret + repr(p) + ' '
 			p = p.next
-		ret = ret + `p`
+		ret = ret + repr(p)
 		ret = ret + ' ]'
 		return ret
 		
@@ -58,12 +58,12 @@ class Polygon:
 		"Apaga o poligono na tela"
 		p = self.pts
 		while p.next != self.pts:
-			if self.cid.has_key (p):
+			if p in self.cid:
 				control.plot_delete (self.cid[p])
 				del (self.cid[p])
 			p = p.next
 
-		if self.cid.has_key (p):
+		if p in self.cid:
 			control.plot_delete (self.cid[p])
 			del (self.cid[p])
 		control.update ()

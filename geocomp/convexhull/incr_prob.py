@@ -149,7 +149,7 @@ def IncrProb (l):
 					a = next
 					b = l[k]
 				else:
-					print 'pau!!!'
+					print('pau!!!')
 
 				a.next = a.prev = b
 				b.next = b.prev = a

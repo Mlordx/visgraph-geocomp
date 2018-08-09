@@ -12,7 +12,7 @@ Classe que define o robo
 #from geocomp.common.prim import *
 from geocomp.common.control import *
 from geocomp.common.point import Point
-from minhasPrim import *
+from .minhasPrim import *
 from geocomp.common.polygon import Polygon
 
 
@@ -24,7 +24,7 @@ class Robo:
         """
         
         def __init__(self, pontos):
-		  self.pontos = pontos
+                self.pontos = pontos
 
                 
 

@@ -56,7 +56,7 @@ def collinear (a, b, c):
 def quickhull_rec (a, b, S):
 	"""Constroi o fecho de a ate b. 
 	
-	Todos os pontos de S estao à direita de ab
+	Todos os pontos de S estao a direita de ab
 	"""
 	
 	if len (S) == 0:

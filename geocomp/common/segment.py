@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import control
+from . import control
 from geocomp import config
 
 class Segment:
@@ -12,7 +12,7 @@ class Segment:
 	
 	def __repr__ (self):
 		"retorna uma string da forma [ ( x0 y0 );( x1 y1 ) ]"
-		return '[ '+`self.init`+'; '+`self.to`+' ]'
+		return '[ '+repr(self.init)+'; '+repr(self.to)+' ]'
 
 	def hilight (self, color_line=config.COLOR_HI_SEGMENT,
 			color_point=config.COLOR_HI_SEGMENT_POINT):

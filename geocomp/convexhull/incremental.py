@@ -47,7 +47,7 @@ def vertices_tangentes (Q, p):
 		return []
 	
 	if len (tan) != 2:
-		print '\n\n===> len (tan) != 0 e != 2 !!!!\n\n'
+		print('\n\n===> len (tan) != 0 e != 2 !!!!\n\n')
 
 	if right (tan[0], tan[1], p):
 		return [ tan[0], tan[1] ]
@@ -106,7 +106,7 @@ def Incremental (l):
 					a = next
 					b = l[k]
 				else:
-					print 'pau!!!'
+					print('pau!!!')
 
 				a.next = a.prev = b
 				b.next = b.prev = a

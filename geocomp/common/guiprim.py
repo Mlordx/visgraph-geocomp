@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Contem as mesmas funcoes do modulo geocomp.common.prim, mas desenhando na tela"""
 
-import control
-import prim
+from . import control
+from . import prim
 from geocomp import config
 
 

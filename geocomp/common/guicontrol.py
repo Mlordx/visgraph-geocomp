@@ -6,8 +6,8 @@ skip = 0
 gui = None
 
 import time
-import prim
-import control
+from . import prim
+from . import control
 
 
 def init_display (toolkit, master):
@@ -22,7 +22,7 @@ def hide_all ():
 
 	Como, em geral, um algoritmo leva mais tempo para desenhar 
 	na tela linhas/pontos/... do que para calcular o que ele precisa,
-	é interessante permitir que um algoritmo rode sem que ele mostre nenhuma
+	 interessante permitir que um algoritmo rode sem que ele mostre nenhuma
 	saida, apenas contando o numero de operacoes primitivas realizadas.
 	Essa funcao, junto com unhide_all permite isso."""
 	global skip

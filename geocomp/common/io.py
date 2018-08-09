@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """Modulo para leitura de um arquivo de dados"""
 
-from string import split, atoi
-from point import Point
+from .point import Point
 
 def open_file (name):
 	"""Le o arquivo passado, e retorna o seu conteudo
@@ -23,7 +22,7 @@ def open_file (name):
 	for linha in f.readlines ():
 		if linha[0] == '#': continue
 
-		coord = split (linha)
+		coord = linha.split()
 
 		fields = len (coord)
 		if fields == 0: continue
@@ -39,8 +38,8 @@ if __name__ == '__main__':
 	import sys
 
 	for i in sys.argv[1:]:
-		print i,':'
+		print((i,':'))
 		lista = open_file (i)
-		print '  ',`len(lista)`, 'pontos:'
+		print(('  ',repr(len(lista)), 'pontos:'))
 		for p in lista:
-			print p
+			print(p)

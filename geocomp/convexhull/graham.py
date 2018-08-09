@@ -4,6 +4,7 @@
 from geocomp.common.polygon import Polygon
 from geocomp.common import control
 from geocomp.common.guiprim import *
+from functools import cmp_to_key
 
 
 def Graham (l):
@@ -50,7 +51,7 @@ def Graham (l):
 			return dist_z_y > dist_z_x
 
 	# Ordena os pontos pelo seus angulos
-	l.sort (cmp)
+	l.sort (key=cmp_to_key(cmp))
 
 	# eliminando pontos colineares
 	l2 = [ l[0] ]

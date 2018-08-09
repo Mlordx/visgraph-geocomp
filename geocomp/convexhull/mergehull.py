@@ -5,7 +5,7 @@
 from geocomp.common.polygon import Polygon
 from geocomp.common import control
 from geocomp.common.guiprim import *
-
+from functools import cmp_to_key
 
 def Mergehull (l):
 	"""Algoritmo Merge Hull para o problema do Fecho Convexo"""
@@ -17,7 +17,7 @@ def Mergehull (l):
 		if a.y < b.y: return -1
 		return a.y > b.y
 	
-	l.sort (cmp)
+	l.sort (key=cmp_to_key(cmp))
 
 	(min_pt, max_pt, hull) = mergehull_rec (l)
 
@@ -39,8 +39,8 @@ def mergehull_rec (l):
 		return (l[0], l[0], pol)
 	
 	# Divisao
-	l1 = l[:n/2]
-	l2 = l[n/2:]
+	l1 = l[:n//2]
+	l2 = l[n//2:]
 
 	id = control.plot_vert_line ((l2[0].x + l1[-1].x) / 2.)
 	control.sleep ()
@@ -168,22 +168,22 @@ def is_tan (a, b, c, d, e, f):
 	return 1
 
 def is_sup_tan_ch1 (v, u):
-	"Retorna verdadeiro se vu é tangente superior ao poligono que contem v"
+	"Retorna verdadeiro se vu tangente superior ao poligono que contem v"
 	if v == v.next: return 1
 	return is_tan (v, u, v.next, v != v.next.next, u, right)
 
 def is_sup_tan_ch2 (v, u):
-	"Retorna verdadeiro se vu é tangente superior ao poligono que contem u"
+	"Retorna verdadeiro se vu tangente superior ao poligono que contem u"
 	if u == u.next: return 1
 	return is_tan (v, u, u.prev, u != u.prev.prev, v, right)
 
 def is_inf_tan_ch1 (v, u):
-	"Retorna verdadeiro se vu é tangente inferior ao poligono que contem v"
+	"Retorna verdadeiro se vu tangente inferior ao poligono que contem v"
 	if v == v.next: return 1
 	return is_tan (v, u, v.prev, v != v.prev.prev, u, left)
 
 def is_inf_tan_ch2 (v, u):
-	"Retorna verdadeiro se vu é tangente inferior ao poligono que contem u"
+	"Retorna verdadeiro se vu tangente inferior ao poligono que contem u"
 	if u == u.next: return 1
 	return is_tan (v, u, u.next, u != u.next.next, v, left)
 

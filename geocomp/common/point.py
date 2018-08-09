@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import control
+from . import control
 from geocomp import config
 
 class Point:
@@ -15,7 +15,7 @@ class Point:
 
 	def __repr__ (self):
 		"Retorna uma string da forma '( x y )'"
-		return '( ' + `self.x` + ' ' + `self.y` + ' )'
+		return '( ' + repr(self.x) + ' ' + repr(self.y) + ' )'
 
 	def plot (self, color=config.COLOR_POINT):
 		"Desenha o ponto na cor especificada"
@@ -25,9 +25,9 @@ class Point:
 
         ################### VICTOR MUDOU #######################
 
-        def unplot(self, id = None):
-                if id == None: id = self.plot_id
-                control.plot_delete(id)
+	def unplot(self, id = None):
+		if id == None: id = self.plot_id
+		control.plot_delete(id)
 
 
 

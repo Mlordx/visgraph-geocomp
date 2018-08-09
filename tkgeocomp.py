@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from Tkinter import *
+from tkinter import *
 import geocomp
 from geocomp.gui import tk
 from geocomp import config
@@ -34,7 +34,7 @@ class App:
 		self.file_sub_frame = Frame (self.file_frame)
 		self.file_sub_frame.pack (fill = BOTH)
 		self.selected_file.trace_variable ("w", 
-				lambda x, y, z, self=self: self.open_file ())
+				                   lambda x, y, z, self=self: self.open_file ())
 
 		filename = self.update_files (config.DATADIR)
 
@@ -46,10 +46,10 @@ class App:
 				      lambda event, self=self: self.tk.quit ())
 
 		self.canvas = Canvas (self.main_frame, 
-					width = config.WIDTH, 
-					height = config.HEIGHT, 
-					bg = 'black', 
-					takefocus=1)
+				      width = config.WIDTH, 
+				      height = config.HEIGHT, 
+				      bg = 'black', 
+				      takefocus=1)
 		self.canvas.pack (fill = BOTH, expand=1)
 
 
@@ -64,8 +64,8 @@ class App:
 		self.step_button.grid (row=0, column=0, sticky=W+E, padx=20)
 
 		self.print_canvas = Button (self.controls, 
-						text = 'imprimir', 
-						command = self.print_to_file)
+					    text = 'imprimir', 
+					    command = self.print_to_file)
 		self.print_canvas.grid (row=0, column = 1, sticky=W+E, padx=20)
 
 		self.show_var = IntVar ()
@@ -76,8 +76,8 @@ class App:
 
 
 		self.delay = Scale (self.main_frame, orient = HORIZONTAL, 
-					from_ = 0, to = config.MAX_DELAY, 
-					resolution = 10)
+				    from_ = 0, to = config.MAX_DELAY, 
+				    resolution = 10)
 		self.delay.set (config.DELAY)
 		self.delay.pack (fill = X, side=BOTTOM)
 
@@ -95,15 +95,14 @@ class App:
 				self.filelist.destroy ()
 
 		files = os.listdir (directory)
-		files = filter (lambda x: x[0] != '.', files)
+		files = [x for x in files if x[0] != '.']
 		files.sort ()
 		files.insert (0, '..')
 		for i in range (len(files)):
 			if os.path.isdir (os.path.join (directory, files[i])):
 				files[i] = files[i] + '/'
 
-		self.filelist = apply (OptionMenu, 
-			(self.file_frame, self.selected_file) + tuple (files))
+		self.filelist = OptionMenu(*(self.file_frame, self.selected_file) + tuple (files))
 		self.filelist.pack (fill=X)
 		self.filelist['takefocus'] = 1
 		self.filelist.directory = directory
@@ -131,7 +130,7 @@ class App:
 			problem = clicked.problem
 			parent = clicked.parent
 
-		if self.panel.has_key (problem):
+		if problem in self.panel:
 			self.buttons.pack_forget ()
 			self.buttons = self.panel[problem]
 			self.buttons.pack (fill = BOTH, side = BOTTOM)
@@ -150,7 +149,7 @@ class App:
 			b = Button (buttons, text = a[-1])
 			if a[1] == None:
 				b['command'] = lambda self=self, b=b: \
-						self.create_buttons (b)
+						            self.create_buttons (b)
 				b.problem = getattr (problem, a[0])
 				b.parent = problem
 				b.grid (row = row, column = 0, 
@@ -160,8 +159,8 @@ class App:
 				func = getattr (alg, a[1])
 				alg_name = a[1]
 				b['command'] = lambda self=self, func=func,\
-					alg_name=alg_name, b=b: \
-					self.run_algorithm (func, b, alg_name)
+					                    alg_name=alg_name, b=b: \
+					                                          self.run_algorithm (func, b, alg_name)
 				b.grid (row = row, column = 0, sticky = W+E)
 				l = Label (buttons, text = '------')
 				l.grid (row = row, column=1, sticky = W+E)
@@ -196,7 +195,7 @@ class App:
 		"abre um arquivo de entrada"
 		#if self.in_algorithm: return
 		selection = os.path.join (self.filelist.directory, 
-						self.selected_file.get ())
+					  self.selected_file.get ())
 		if os.path.isdir (selection):
 			self.update_files (selection)
 			return
@@ -220,7 +219,7 @@ class App:
 		#self.left['takefocus'] = 0
 		self.filelist['state'] = DISABLED
 		self.filelist['takefocus'] = 0
- 		for b in self.buttons.children.values () :
+		for b in list(self.buttons.children.values()):
  			b['state'] = DISABLED
 		if self.show_var.get ():
 			self.delay['state'] = DISABLED
@@ -235,33 +234,33 @@ class App:
 		#self.left['takefocus'] = 1
 		self.filelist['state'] = NORMAL
 		self.filelist['takefocus'] = 1
- 		for b in self.buttons.children.values () :
+		for b in list(self.buttons.children.values ()) :
  			b['state'] = NORMAL
 		if self.show_var.get ():
 			self.delay['state'] = NORMAL
 			self.step_button['state'] = NORMAL
 			self.print_canvas['state'] = NORMAL
 		self.show_button['state'] = NORMAL
-	
+	                
 	def reset_labels (self):
 		"Joga fora o conteudo de todos os labels"
 		for l in self.labels:
 			l['text'] = '------'
 
 		self.bottom_label['text'] = '----------'
-	
+	        
 	def print_to_file (self):
 		"Imprime self.canvas para um arquivo .eps"
 		if self.current_algorithm != None:
 			epsfile = self.current_filename + '-' + \
-				self.current_algorithm + '-' + \
-				`self.file_cont` + '.eps'
+				  self.current_algorithm + '-' + \
+				  repr(self.file_cont) + '.eps'
 		else:
 			epsfile = self.current_filename + '-' + \
-				`self.file_cont` + '.eps'
-		self.canvas.postscript (file=epsfile)
-		self.file_cont = self.file_cont + 1
-		
+				  repr(self.file_cont) + '.eps'
+			self.canvas.postscript (file=epsfile)
+			self.file_cont = self.file_cont + 1
+		        
 	
 	def run_algorithm (self, alg, widget, alg_name):
 		"""roda o algoritmo alg"""
@@ -284,7 +283,7 @@ class App:
 
 		self.tk.unbind ('<space>')
 		self.enable ()
-			
+		
 
 app = App ()
 
